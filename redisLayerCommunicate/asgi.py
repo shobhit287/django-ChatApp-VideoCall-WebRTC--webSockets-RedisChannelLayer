@@ -15,6 +15,6 @@ from redisApp import routing
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'redischannel.settings')
 
 application = ProtocolTypeRouter({
-    'https':get_asgi_application(),
+    'http':get_asgi_application(),
     'websocket':URLRouter(routing.websocket_urlpatterns)
 })
