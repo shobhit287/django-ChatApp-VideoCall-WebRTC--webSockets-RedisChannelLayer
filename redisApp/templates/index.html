@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIMPLE GROUP CHAT</title>
+</head>
+<style>
+  .container{
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+    align-items: center;
+    margin: auto;
+    background-color:thistle;
+    box-shadow: 0px 0px 5px 0px;
+    width:50vw;
+    height:90vh;
+  }
+  .heading{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .received_msg{
+    width:80%;
+    padding: 20px;
+    height:300px;
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+    font-size: 20px;
+    overflow-y: scroll;
+    background-color:teal;
+    border:solid teal;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar {
+    width: 10px; 
+}
+
+::-webkit-scrollbar-thumb {
+    background-color:snow; 
+    border-radius: 5px; 
+}
+  .send_by_user{
+    display: flex;
+    flex-direction: column;
+    align-items: end; 
+  }
+  .send_by_user span{
+    padding: 15px;
+    background-color: yellowgreen;
+    border-radius: 10px;
+    border-color: yellowgreen;
+  }
+  .received_by_user span{
+    padding: 15px;
+    background-color:tan;
+    border-radius: 10px;
+    border-color: tan;
+  }
+  .received_by_user{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+  }
+  form{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+  }
+  form input{
+    width: 100%;
+    padding:14px 20px;
+    border:solid ;
+    border-radius: 10px;
+  }
+  form button{
+    width: 100%;
+    padding:10px 5px;
+    cursor: pointer;
+    background-color: steelblue;
+    border-color: steelblue;
+    border-radius: 10px;
+  }
+</style>
+<body>
+  <div   class="container">
+    <div class="heading">
+      <h1>Group Message Testing</h1>
+      <h1>{%if Group_Name%}
+        {{Group_Name}} Group
+        {%else%}
+        Public Group
+        {%endif%}
+      </h1>
+    </div>
+
+  <div class="received_msg">
+ 
+     
+  </div>
+
+   <div class="send_msg">
+    <form onsubmit="submitHandler(event)">
+     <input type="text" placeholder="Enter Your Message To Send" name="msg" required/>
+     <button>Send</button>
+    </form>
+
+   </div>
+   {{Group_Name|json_script:"group_name"}}
+  </div>
+    <script>
+      var group_Name = JSON.parse(document.getElementById("group_name").textContent);      
+      let msg_body=document.getElementsByClassName("received_msg")[0];
+      if (group_Name){
+        var ws= new WebSocket(`ws://127.0.0.1:8000/ws/async/${group_Name}`)
+      }
+      else{
+      var ws= new WebSocket('ws://127.0.0.1:8000/ws/async')}
+      ws.onopen=function (event){
+       console.log("Web Socket Connected")
+      }
+      ws.onmessage=function(event){
+        let msg_content=`<div class="received_by_user">
+      <span>${event['data']}</span>
+     </div>`;
+      msg_body.innerHTML+=msg_content;
+      }
+      ws.onerror=function(event){
+        console.log("Web Socket Error")
+
+      }
+      ws.onclose=function(event){
+        console.log("Web Socket Closed")
+      }
+
+    function submitHandler(event){
+      event.preventDefault();
+      let msg=document.getElementsByName("msg")[0];
+      let msg_content=`<div class="send_by_user">
+      <span>${msg.value}</span>
+     </div>`;
+      msg_body.innerHTML+=msg_content;
+      ws.send(msg.value); 
+    }
+    </script>
+</body>
+</html>
