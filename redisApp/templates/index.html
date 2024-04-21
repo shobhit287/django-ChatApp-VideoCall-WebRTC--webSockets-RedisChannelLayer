@@ -116,10 +116,10 @@
       var group_Name = JSON.parse(document.getElementById("group_name").textContent);      
       let msg_body=document.getElementsByClassName("received_msg")[0];
       if (group_Name){
-        var ws= new WebSocket(`ws://django-groupchatapp-websockets.onrender.com/ws/async/${group_Name}`)
+        var ws= new WebSocket(`ws://18.208.106.51:8000/ws/async/${group_Name}`)
       }
       else{
-      var ws= new WebSocket('ws://django-groupchatapp-websockets.onrender.com/ws/async')}
+      var ws= new WebSocket('ws://18.208.106.51:8000/ws/async')}
       ws.onopen=function (event){
        console.log("Web Socket Connected")
       }
