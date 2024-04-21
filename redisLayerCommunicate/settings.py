@@ -128,7 +128,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("18.208.106.51", 6379)],
+            "hosts": [("django-groupchatapp-websockets.onrender.com", 6379)],
         },
     },
 }
