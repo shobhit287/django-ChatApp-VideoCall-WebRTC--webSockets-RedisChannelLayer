@@ -124,6 +124,7 @@
        console.log("Web Socket Connected")
       }
       ws.onmessage=function(event){
+        console.log("MESSAGE RECIEIVED:",event)
         let msg_content=`<div class="received_by_user">
       <span>${event['data']}</span>
      </div>`;

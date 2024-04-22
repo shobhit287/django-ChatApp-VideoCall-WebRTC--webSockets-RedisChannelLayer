@@ -8,6 +8,7 @@ class MyAsyncConsumer(AsyncConsumer):
             'type':'websocket.accept'
         })
         self.group_name=self.scope['url_route']['kwargs'].get('slug')
+        print("jfffkfkj",self.group_name)
         if self.group_name:
             await self.channel_layer.group_add(self.group_name,self.channel_name)
         else: 
