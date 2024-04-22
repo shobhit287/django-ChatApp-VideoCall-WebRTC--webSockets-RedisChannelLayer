@@ -12,7 +12,7 @@ import os
 from django.core.asgi import get_asgi_application
 from channels.routing import ProtocolTypeRouter,URLRouter
 from redisApp import routing
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'redischannel.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'redisLayerCommunicate.settings')
 
 application = ProtocolTypeRouter({
     'http':get_asgi_application(),
