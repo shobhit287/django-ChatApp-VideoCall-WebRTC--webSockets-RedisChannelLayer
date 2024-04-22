@@ -2,6 +2,7 @@ from channels.consumer import SyncConsumer,AsyncConsumer
 from channels.exceptions import StopConsumer
 from asgiref.sync import async_to_sync
 import json
+list_of_user=[]
 class MyAsyncConsumer(AsyncConsumer):
     async def websocket_connect(self,event):
         await self.send({
@@ -10,9 +11,15 @@ class MyAsyncConsumer(AsyncConsumer):
         self.group_name=self.scope['url_route']['kwargs'].get('slug')
         print("jfffkfkj",self.group_name)
         if self.group_name:
+            user={f"{self.group_name}":self.channel_name}
+            list_of_user.append(user)
             await self.channel_layer.group_add(self.group_name,self.channel_name)
         else: 
+            user={"public":self.channel_name}
+            list_of_user.append(user)
             await self.channel_layer.group_add('public',self.channel_name)
+
+        print("USERS: ",list_of_user)    
    
 
         
