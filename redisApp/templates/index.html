@@ -116,10 +116,10 @@
       var group_Name = JSON.parse(document.getElementById("group_name").textContent);      
       let msg_body=document.getElementsByClassName("received_msg")[0];
       if (group_Name){
-        var ws= new WebSocket(`ws://34.207.234.10:8000/ws/async/${group_Name}`)
+        var ws= new WebSocket(`ws://3.91.226.168:8000/ws/async/${group_Name}`)
       }
       else{
-      var ws= new WebSocket('ws://34.207.234.10:8000/ws/async')}
+      var ws= new WebSocket('ws://3.91.226.168:8000/ws/async')}
       ws.onopen=function (event){
        console.log("Web Socket Connected")
       }
