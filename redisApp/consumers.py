@@ -9,8 +9,6 @@ class MyAsyncConsumer(AsyncConsumer):
             'type':'websocket.accept'
         })
         self.group_name=self.scope['url_route']['kwargs'].get('slug')
-        print("jfffkfkj",self.group_name)
-        print("USERS: ",list_of_user)  
         if self.group_name:
             user={f"{self.group_name}":self.channel_name}
             list_of_user.append(user)
@@ -26,7 +24,6 @@ class MyAsyncConsumer(AsyncConsumer):
         
 
     async def websocket_receive(self,event):
-        print("DHJDJD",self.group_name)  
         if self.group_name:  
          await self.channel_layer.group_send(self.group_name,{
             'type':'chat.message',
