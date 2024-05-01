@@ -357,6 +357,9 @@ async function answer_offer_remote(answer_sdp,offered_by){
       }
 
   async function accept_answer(accept_sdp){  
+    document.getElementById('sender_userid').innerHTML=""
+     document.getElementById('sender_popup').style.display="none"
+     sender_audio.pause();
     if(!peerConnection.currentRemoteDescription)
     {
         peerConnection.setRemoteDescription(accept_sdp)
