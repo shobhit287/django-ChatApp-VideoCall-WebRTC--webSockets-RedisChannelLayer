@@ -266,10 +266,10 @@
     removeAlerts(); });
     var group_Name = JSON.parse(document.getElementById("group_name").textContent);  
     if (group_Name){
-        var ws= new WebSocket(`ws://127.0.0.1:8000/ws/async/${group_Name}`)
+        var ws= new WebSocket(`ws://13.49.0.83:8000/ws/async/${group_Name}`)
       }
       else{
-      var ws= new WebSocket('ws://127.0.0.1:8000/ws/async')
+      var ws= new WebSocket('ws://13.49.0.83:8000/ws/async')
     }
 
       ws.onopen=function (event){
