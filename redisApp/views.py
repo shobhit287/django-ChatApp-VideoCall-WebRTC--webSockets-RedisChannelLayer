@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.conf import settings
+from .consumers import users_list
 from django.contrib.auth import authenticate, login,logout
 
 def index(request,slug=None):
@@ -63,3 +64,5 @@ def login_user(request):
           messages.warning(request,"Unauthorized Access")
           return JsonResponse({"status":False})     
 
+def video_call(request):
+     return render(request,'videocall.html')

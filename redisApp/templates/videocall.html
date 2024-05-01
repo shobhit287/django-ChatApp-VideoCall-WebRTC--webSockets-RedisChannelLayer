@@ -1,0 +1,507 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>Video Call</title>
+</head>
+<style>
+  body{
+    position: relative;
+  }
+  .notify{
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    justify-content: flex-end;
+    align-items: end;
+
+  }
+  .container{
+    align-items: center;
+    margin: auto;
+    /* display: flex; */
+      background-color:thistle;
+    box-shadow: 0px 0px 5px 0px;
+    min-width:50vw;
+    min-height:100vh;
+    padding-block:10px;
+    margin-block: 20px;
+  }
+  .uppersec_container{
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-direction: column;
+  }
+  h1{
+    text-align: center;
+  }
+  .heading{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .btn_login_signup{
+    display: flex;
+    flex-direction: column;
+  }
+  .btn_login_signup button{
+    margin-block:5px;
+  }
+  .received_msg{
+    min-width:80%;
+    padding: 20px;
+    height:300px;
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+    font-size: 1.5rem;
+    overflow-y: scroll;
+    background-color:teal;
+    border:solid teal;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar {
+    width: 10px; 
+}
+
+::-webkit-scrollbar-thumb {
+    background-color:snow; 
+    border-radius: 5px; 
+}
+  .send_by_user{
+    display: flex;
+    flex-direction: column;
+    align-items: end; 
+  }
+  .send_by_user span{
+    padding: 15px;
+    background-color: yellowgreen;
+    border-radius: 10px;
+    border-color: yellowgreen;
+  }
+  .received_by_user span{
+    padding: 15px;
+    background-color:tan;
+    border-radius: 10px;
+    border-color: tan;
+  }
+  .received_by_user{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+  }
+  form{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+  }
+  form input{
+    width: 100%;
+    padding:14px 20px;
+    border:solid ;
+    border-radius: 10px;
+  }
+  form button{
+    width: 100%;
+    padding:10px 5px;
+    cursor: pointer;
+    background-color: steelblue;
+    border-color: steelblue;
+    border-radius: 10px;
+  }
+  .notify_msg{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 38%;
+  }
+  .send_msg{
+    margin-top: 8px;
+  }
+  .call_window{
+    position: absolute;
+    top:0px;
+    right:3px;
+    background-color:darkgray;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap:10px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0px;
+    width:30%;
+    height:400px;
+
+  }
+  .answer_buttons{
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+  }
+  .answer_buttons button{
+   padding:10px 40px;
+   border-radius: 10px;
+  }
+  .answer_buttons button:nth-child(1){
+   background-color: greenyellow;
+  }
+  .answer_buttons button:nth-child(2){
+   background-color: red;
+  }
+  .sender_window{
+    position: absolute;
+    top:0px;
+    right:3px;
+    background-color:darkgray;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap:10px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0px;
+    width:30%;
+    height:400px;
+
+  }
+  .cancel_button{
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+  }
+  .cancel_button button{
+   padding:10px 40px;
+   border-radius: 10px;
+   background-color: red;
+  }
+ 
+  @media only screen and (max-width:500px){
+.received_msg{
+  width:100%;
+  font-size:1em;
+  }
+  .container{
+    height:100%;
+  }
+}
+</style>
+<body>
+  
+  <div  class="container">
+    <div class="uppersec_container">
+
+
+    <div class="heading">
+      <h1>Video Call Testing</h1>
+      <form onsubmit="handlecall(event)">
+      <select id="users_dropdown" required>
+      </select>
+      <button>Start Video Call</button>
+    </form>
+    </div>
+<div class="initialize_call">
+    <textarea id="create_offer_text"  style="width: 400px; height: 70px;" placeholder="create offer text"></textarea>
+    <textarea id="answer_offer_text"  style="width: 400px; height: 70px;" placeholder="answer text"></textarea>
+    <button id="create_sdp">Create Offer</button>
+    <button id="answer_offer">Answer Offer</button>
+    <button id="accept_offer">Accept</button>
+</div>
+
+   </div>
+   <div class="video_sec" style="display: flex; flex-direction: row; gap:10px; align-items: center; margin-top: 10px;">
+   <video autoplay muted  id="user_video"></video>
+   <video autoplay id="received_video"></video></div>
+  </div>
+
+  <div class="call_window" id="call_popup">
+  <h3 id="caller_userid" style="text-align: center;"></h3>
+  <div class="answer_buttons">
+  <button onclick="answer_btn(event)" >Answer</button>
+  <button onclick="answer_btn(event)" >Reject</button>
+ </div></div>
+
+  <div class="sender_window" id="sender_popup">
+  <h3 id="sender_userid" style="text-align: center;"></h3>
+  <div class="cancel_button">
+  <button onclick="cancel_btn()" >Cancel</button>
+ </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+  <script
+  src="https://code.jquery.com/jquery-3.7.1.js"
+  integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+  crossorigin="anonymous"></script>
+
+
+  <script>
+    var remote_audio,sender_audio,offered_by,remote_offer_sdp;
+    var ws=new WebSocket('ws://127.0.0.1:8000/ws/awsc')
+    ws.onopen=function(event){
+        console.log("Websocket Connected")
+    }
+    ws.onmessage=async function(event){
+      console.log(event)
+      data=JSON.parse(event['data']);
+      if (data['type']=='users_info'){
+        setdropdownmenu(data['users'])
+      }
+      if(data['type']=='send_offer'){
+        document.getElementById('caller_userid').innerHTML=data['offered_by']
+       document.getElementById('call_popup').style.display="flex";
+        remote_audio= new Audio('{% static "remote_tone.mp3" %}');
+        offered_by=data['offered_by'];
+        remote_offer_sdp=data['offer']
+       remote_audio.play();
+      setTimeout(()=>{
+      remote_audio.pause();   
+      document.getElementById('caller_userid').innerHTML=""
+      document.getElementById('call_popup').style.display="none";
+    },25000)
+      }
+      if(data['type']=='answer_sdp'){
+        answer_offer_remote(data['offer_sdp'],data['offered_by'])
+        
+      }
+
+      if(data['type']=='call_accepted'){
+
+        accept_answer(data['answer_sdp'])
+        
+      }
+
+      if(data['type']=='cancelled'){
+        cancelled_handler();
+
+      }
+      if(data['type']=='rejected'){
+        rejected();
+
+      }
+    }
+
+  function cancel_btn(){
+      user_id=document.getElementById('users_dropdown').value
+      data={type:'cancelled','remote_user':user_id}
+      ws.send(JSON.stringify(data))
+      document.getElementById('sender_userid').innerHTML=""
+     document.getElementById('sender_popup').style.display="none"
+     sender_audio.pause();
+  } 
+
+  function cancelled_handler(){
+    document.getElementById('caller_userid').innerHTML=""
+     document.getElementById('call_popup').style.display="none"
+     remote_audio.pause();
+  
+  }
+  function rejected(){
+    document.getElementById('sender_userid').innerHTML=""
+     document.getElementById('sender_popup').style.display="none"
+     sender_audio.pause();
+  }
+  function answer_btn(event){
+    btnValue = event.target.innerText;
+    if (btnValue=='Answer'){
+      accepted={'type':'accepted','offered_by':offered_by,'offer_sdp':remote_offer_sdp}
+      remote_audio.pause();   
+      document.getElementById('caller_userid').innerHTML=""
+      document.getElementById('call_popup').style.display="none";
+      ws.send(JSON.stringify(accepted))
+      remote_offer_sdp=null;
+    }
+    else {
+      remote_audio.pause();   
+      document.getElementById('caller_userid').innerHTML=""
+      document.getElementById('call_popup').style.display="none";
+      rejected={'type':'rejected','offered_by':offered_by}
+      remote_offer_sdp=null;
+      ws.send(JSON.stringify(rejected))
+    }
+  }
+ 
+
+async function answer_offer_remote(answer_sdp,offered_by){
+        peerConnection = new RTCPeerConnection(server);
+        remotestream = new MediaStream();
+        document.getElementById('received_video').srcObject = remotestream;
+        localstream.getTracks().forEach(track => {
+            peerConnection.addTrack(track, localstream);
+        });
+        peerConnection.ontrack = async (event) => {
+            event.streams[0].getTracks().forEach(track => {
+                remotestream.addTrack(track);
+            });
+        };
+        let icecandidate=true
+        peerConnection.onicecandidate = async(event) => {
+            if (event.candidate && icecandidate) {
+              icecandidate=false
+              accepted_answer_sdp={'type':'accepted_answer_sdp',"answer_sdp":peerConnection.localDescription,'remote_user':offered_by}
+              ws.send(JSON.stringify(accepted_answer_sdp))
+            }
+            
+        };
+        await peerConnection.setRemoteDescription(answer_sdp)
+        let answer=await peerConnection.createAnswer()
+        await peerConnection.setLocalDescription(answer)
+    
+      }
+
+  async function accept_answer(accept_sdp){  
+    if(!peerConnection.currentRemoteDescription)
+    {
+        peerConnection.setRemoteDescription(accept_sdp)
+        
+    }
+
+}  
+
+
+
+  async function handlecall(event){
+  event.preventDefault();
+  user_id=document.getElementById('users_dropdown').value
+  document.getElementById('sender_userid').innerHTML=user_id
+  document.getElementById('sender_popup').style.display="flex"
+  sender_audio= new Audio('{% static "sender_tone.mp3" %}');
+  sender_audio.play();
+  setTimeout(()=>{
+  document.getElementById('sender_userid').innerHTML=""
+  document.getElementById('sender_popup').style.display="none"
+  sender_audio.pause();
+  },25000)
+  create_offer_remote(user_id)
+  
+  }
+
+
+    function setdropdownmenu(users){
+   document.getElementById('users_dropdown').innerHTML ="";
+   for(let i=0;i<users.length;i++){
+     for (var user in users[i]){
+      let option=`<option >${user}</option>`
+      document.getElementById('users_dropdown').innerHTML += option;
+     }
+   }
+    }
+    let localstream;
+    let remotestream;
+    let peerConnection;
+    let server={
+        iceServers:[
+        {
+            urls:['stun:stun2.l.google.com:19302','stun:stun1.l.google.com:19302']
+        }
+    ]
+    }
+    document.addEventListener('DOMContentLoaded', async function() {   
+    localstream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+    document.getElementById("user_video").srcObject = localstream;
+    document.getElementById("user_video").play();    
+});
+    let createoffer=async function(){ 
+        peerConnection = new RTCPeerConnection(server);
+        remotestream = new MediaStream();
+        document.getElementById('received_video').srcObject = remotestream;
+        localstream.getTracks().forEach(track => {
+            peerConnection.addTrack(track, localstream);
+        });
+        peerConnection.ontrack = async (event) => {
+            event.streams[0].getTracks().forEach(track => {
+                remotestream.addTrack(track);
+            });
+        };
+        peerConnection.onicecandidate = async(event) => {
+    
+            if (event.candidate) {
+                 document.getElementById('create_offer_text').value=JSON.stringify(peerConnection.localDescription)
+      
+            }
+        };
+        let offer = await peerConnection.createOffer();
+        await peerConnection.setLocalDescription(offer);
+        document.getElementById('create_offer_text').value = JSON.stringify(offer); 
+        
+    } 
+
+    async function create_offer_remote(user_id){ 
+        peerConnection = new RTCPeerConnection(server);
+        remotestream = new MediaStream();
+        document.getElementById('received_video').srcObject = remotestream;
+        localstream.getTracks().forEach(track => {
+            peerConnection.addTrack(track, localstream);
+        });
+        peerConnection.ontrack = async (event) => {
+            event.streams[0].getTracks().forEach(track => {
+                remotestream.addTrack(track);
+            });
+        };
+        let icecandidate=true
+        peerConnection.onicecandidate = async(event) => {
+            if (event.candidate && icecandidate) {
+              icecandidate=false
+              offer={'type':'create_offer','user':user_id,"offer_sdp":peerConnection.localDescription}
+              console.log("OFFER",offer)
+              ws.send(JSON.stringify(offer))
+            }
+        };
+        let offer = await peerConnection.createOffer();
+        await peerConnection.setLocalDescription(offer);
+    } 
+
+   let answer_offer=async function(){
+    peerConnection = new RTCPeerConnection(server);
+        remotestream = new MediaStream();
+        document.getElementById('received_video').srcObject = remotestream;
+        localstream.getTracks().forEach(track => {
+            peerConnection.addTrack(track, localstream);
+        });
+        peerConnection.ontrack = async (event) => {
+            event.streams[0].getTracks().forEach(track => {
+                remotestream.addTrack(track);
+            });
+        };
+        peerConnection.onicecandidate = async(event) => {
+            if (event.candidate) {
+                 document.getElementById('create_offer_text').value=JSON.stringify(peerConnection.localDescription)
+            }
+        };
+        let offer=document.getElementById('create_offer_text').value
+        if(!offer){
+            return alert("Retrieve From Peer First.....")
+        }
+        offer=JSON.parse(offer)
+        await peerConnection.setRemoteDescription(offer)
+        let answer=await peerConnection.createAnswer()
+        await peerConnection.setLocalDescription(answer)
+        document.getElementById('answer_offer_text').value=JSON.stringify(answer)
+        };
+
+ 
+let add_answer=async function(){
+    let ans=document.getElementById('answer_offer_text').value
+    if(!ans) return alert("Retrieve answer from peer first.....")
+    ans=JSON.parse(ans)
+    if(!peerConnection.currentRemoteDescription)
+    {
+        console.log("Hello")
+
+        peerConnection.setRemoteDescription(ans)
+    }
+
+}
+    document.getElementById('create_sdp').addEventListener('click',createoffer);
+    document.getElementById('answer_offer').addEventListener('click',answer_offer);
+    document.getElementById('accept_offer').addEventListener('click',add_answer);
+    </script>
+</body>
+</html>
