@@ -181,7 +181,17 @@
    border-radius: 10px;
    background-color: red;
   }
- 
+ .video_sec{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 1em;
+  width: 100%;
+  padding: 10px;
+ }
+ .video_sec video {
+  width: 100%;
+  height: auto; 
+}
   @media only screen and (max-width:500px){
 .received_msg{
   width:100%;
@@ -215,7 +225,7 @@
 </div>
 
    </div>
-   <div class="video_sec" style="display: flex; flex-direction: row; gap:10px; align-items: center; margin-top: 10px;">
+   <div class="video_sec" style="margin-top: 10px;">
    <video autoplay muted  id="user_video"></video>
    <video autoplay id="received_video"></video></div>
   </div>
@@ -244,7 +254,7 @@
 
   <script>
     var remote_audio,sender_audio,offered_by,remote_offer_sdp;
-    var ws=new WebSocket('ws://13.49.0.83:8000/ws/awsc')
+    var ws=new WebSocket('wss://shobhit287.pythonanywhere.com/ws/awsc')
     ws.onopen=function(event){
         console.log("Websocket Connected")
     }
@@ -266,7 +276,7 @@
       document.getElementById('caller_userid').innerHTML=""
       document.getElementById('call_popup').style.display="none";
     },25000)
-      }
+    }
       if(data['type']=='answer_sdp'){
         answer_offer_remote(data['offer_sdp'],data['offered_by'])
         
